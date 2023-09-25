@@ -40,13 +40,13 @@ Map config = [
         if (env.GIT_BRANCH_NAME == 'master') {
             return 'MASTER'
         }
-        else if (env.GIT_BRANCH_NAME ~== 'feature.*') {
+        else if (env.GIT_BRANCH_NAME == 'feature.*') {
             return 'FEAT'
         }
-        else if (env.GIT_BRANCH_NAME ~== 'break.*') {
+        else if (env.GIT_BRANCH_NAME == 'break.*') {
             return 'BREAK'
         }
-        else if (env.GIT_BRANCH_NAME ~== 'fix.*') {
+        else if (env.GIT_BRANCH_NAME == 'fix.*') {
             return 'FIX'
         }
         else {
