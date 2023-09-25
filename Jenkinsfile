@@ -188,8 +188,8 @@ pipeline{
                 script {
                     if (isValidBranch()) {
                         echo "step docker"
-                        String dockerfile = buscarArchivo( app, "Dockerfile")
-                        if(dockerfile != "")
+                        String dockerfiles = buscarArchivo( app, "dockerfile")
+                        if(dockerfiles != "")
                         {
                             String tag = calculateNextTag()
                             createTag(tag)
