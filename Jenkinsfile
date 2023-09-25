@@ -60,18 +60,18 @@ Map config = [
         withCredentials([usernameColonPassword(credentialsId:'idSecretoJenkins', variable : 'GITHUB_TOKEN')]) {
             return $GITHUB_TOKEN
 
-
-        // Kubernetes
-        sh 'apk add kubectl'
-        // Helm
-        sh 'apk add helm'
-        // Docker
-        sh 'apk install docker'
-        sh 'rc-update add docker boot'
-        sh 'service docker start'
-        // npm
-        sh 'apk add nodejs npm'
-
+        node{
+            // Kubernetes
+            sh 'apk add kubectl'
+            // Helm
+            sh 'apk add helm'
+            // Docker
+            sh 'apk install docker'
+            sh 'rc-update add docker boot'
+            sh 'service docker start'
+            // npm
+            sh 'apk add nodejs npm'
+        }
         // Kubeconfig
         KUBECONFIG_CREDENTIALS = credentials('carne')
         }
