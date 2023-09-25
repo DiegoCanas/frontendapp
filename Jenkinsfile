@@ -21,11 +21,7 @@ def client = new DefaultKubernetesClient(config)
 //def dockerfile = findFiles(glob:'**/Dockerfile').get(0)
 
   // Meter el nombre del repositorio // Se saca de variable de entorno
-String dockerfilePath = sh(script: 'find . -m "*Dockerfile"', returnStdout: true).trim()
-def IMAGE_NAME = dockerfilePath
-def TAG_TO_CHECK = nextTag()
-def PREVIOUS_TAG = lastTag()
-String NEXUS_REGISTRY_URL = 'pre.docker.nexus.com'
+
 
 // Ahora puedes usar 'client' para interactuar con el clúster Kubernetes
 /*
@@ -35,50 +31,6 @@ namespaces.items.each { Namespace ns ->
 }
 */
 
-String lastTag() {
-    /*
-        El sh ejecuta sentencias bash
-        Obten los tags remotos
-    */
-    sh('git ls-remote --tags origin')
-    
-    //Ordenalos alfanuméricamente para obtener el último
-    return sh(script: 'git describe --tags --abbrev=0', stdout : true)
-}
-
-String calculateNextTag() {
-
-
-    // https://www.baeldung.com/groovy-convert-string-to-integer
-    
-    def tagParts = lastTag().tokenize('.')  // tokenize quita espacios
-    def x = tagParts[0] as int
-    def y = tagParts[1] as int
-    def z = tagParts[2] as int
-    
-    //Esta parte te la dejo a ti, quiero dormir (ten en cuenta si no hay tags en el repo)
-    if (isFeature()) {
-        y++
-    }
-    else if (isBreak()) {
-        x++
-    }
-    else if (isFix()) {
-        z++
-    } else if(isMaster()){
-        //Decidir que hacer
-    }
-    
-    return "${x}.${y}.${z}"
-}
-
-void createTag(String nextTag) {
-    //withCredentials()...  investigar cómo logarse en git
-
-    echo("Siguiente version calculada: ${nextTag}")
-    sh("git tag ${nextTag}")
-    sh("git push origin ${nextTag}")
-}
 
 
 
@@ -109,6 +61,11 @@ Map config = [
             return $GITHUB_TOKEN
 
         node{
+            String dockerfilePath = sh(script: 'find . -m "*Dockerfile"', returnStdout: true).trim()
+            def IMAGE_NAME = dockerfilePath
+            def TAG_TO_CHECK = nextTag()
+            def PREVIOUS_TAG = lastTag()
+            String NEXUS_REGISTRY_URL = 'pre.docker.nexus.com'
             // Kubernetes
             sh 'apk add kubectl'
             // Helm
@@ -346,3 +303,47 @@ boolean isPullRequestToMaster() {
     return env.CHANGE_TARGET == 'refs/heads/master'
 }
 
+String lastTag() {
+    /*
+        El sh ejecuta sentencias bash
+        Obten los tags remotos
+    */
+    sh('git ls-remote --tags origin')
+    
+    //Ordenalos alfanuméricamente para obtener el último
+    return sh(script: 'git describe --tags --abbrev=0', stdout : true)
+}
+
+String calculateNextTag() {
+
+
+    // https://www.baeldung.com/groovy-convert-string-to-integer
+    
+    def tagParts = lastTag().tokenize('.')  // tokenize quita espacios
+    def x = tagParts[0] as int
+    def y = tagParts[1] as int
+    def z = tagParts[2] as int
+    
+    //Esta parte te la dejo a ti, quiero dormir (ten en cuenta si no hay tags en el repo)
+    if (isFeature()) {
+        y++
+    }
+    else if (isBreak()) {
+        x++
+    }
+    else if (isFix()) {
+        z++
+    } else if(isMaster()){
+        //Decidir que hacer
+    }
+    
+    return "${x}.${y}.${z}"
+}
+
+void createTag(String nextTag) {
+    //withCredentials()...  investigar cómo logarse en git
+
+    echo("Siguiente version calculada: ${nextTag}")
+    sh("git tag ${nextTag}")
+    sh("git push origin ${nextTag}")
+}
