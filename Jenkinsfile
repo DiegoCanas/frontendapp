@@ -268,10 +268,9 @@ pipeline{
                 echo 'Etiqueta no cambiada'
                 curl -X DELETE -u admin:admin123  "http://somedomain/nexus/content/repositories/myrepo/com/test/test-artifact/1.0.0/"
                 */
-            }
-            }
         }
     }
+}
 
 boolean isValidBranch() { // Triggers
     return config.branchType != 'UKNOWN'
