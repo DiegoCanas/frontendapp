@@ -253,6 +253,7 @@ pipeline{
             }
             failure {
                 echo "Pipeline failed"
+                /*
                 if (dockerfileContents.contains("LABEL version=\"$TAG_TO_CHECK\"")){
                 // Agregar aquí acciones adicionales en caso de que el pipeline falle
                 // Falta comprobacion de si se va a hacer el rollback o no
@@ -264,6 +265,7 @@ pipeline{
                 else{
                     echo 'Etiqueta no cambiada'
                     curl -X DELETE -u admin:admin123  "http://somedomain/nexus/content/repositories/myrepo/com/test/test-artifact/1.0.0/"
+                    */
                 }
                 }
             }
