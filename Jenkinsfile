@@ -17,8 +17,10 @@ def config = new ConfigBuilder()
 
 def client = new DefaultKubernetesClient(config)
 */
-// def dockerfile = sh(script: 'git ls-files --other --exclude-standard "Dockerfile*"', returnStdout: true).trim()
-def IMAGE_NAME = 'dockerfile'  // Meter el nombre del repositorio // Se saca de variable de entorno
+
+//def dockerfile = findFiles(glob:'**/Dockerfile').get(0)
+String dockerfilePath = sh(script: 'find . -m "*Dockerfile"', returnStdout: true).trim()
+def IMAGE_NAME = dockerfilePath  // Meter el nombre del repositorio // Se saca de variable de entorno
 def TAG_TO_CHECK = nextTag()
 def PREVIOUS_TAG = lastTag()
 String NEXUS_REGISTRY_URL = 'pre.docker.nexus.com'
