@@ -31,35 +31,13 @@ namespaces.items.each { Namespace ns ->
 }
 */
 
-boolean isValidBranch() { // Triggers
-    return config.branchType != 'UKNOWN'
-}
 
-boolean isFeature() {
-    return config.branchType == 'FEAT'
-}
-
-boolean isBreak() {
-    return config.branchType == 'BREAK'
-}
-
-boolean isFix() {
-    return config.branchType == 'FIX'
-}
-
-boolean isMaster() {
-    return config.branchType == 'MASTER'
-}
-
-boolean isPullRequestToMaster() {
-    return env.CHANGE_TARGET == 'refs/heads/master'
-}
 
 
 //Se genera el mapa con la configuración
 Map config = [
     //Unos corhcetes {} significan que vas a meter un trozo de código. Como si ejecutases algo dentro del if
-    branchType: {
+    config.branchType: {
         if (env.GIT_BRANCH_NAME == 'master') {
             return 'MASTER'
         }
@@ -301,7 +279,29 @@ pipeline{
     }
 }
 
+boolean isValidBranch() { // Triggers
+    return config.branchType != 'UKNOWN'
+}
 
+boolean isFeature() {
+    return config.branchType == 'FEAT'
+}
+
+boolean isBreak() {
+    return config.branchType == 'BREAK'
+}
+
+boolean isFix() {
+    return config.branchType == 'FIX'
+}
+
+boolean isMaster() {
+    return config.branchType == 'MASTER'
+}
+
+boolean isPullRequestToMaster() {
+    return env.CHANGE_TARGET == 'refs/heads/master'
+}
 
 String lastTag() {
     /*
