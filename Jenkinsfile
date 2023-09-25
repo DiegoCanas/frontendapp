@@ -19,7 +19,7 @@ def client = new DefaultKubernetesClient(config)
 */
 
 //def dockerfile = findFiles(glob:'**/Dockerfile').get(0)
-String dockerfilePath = sh(script: 'find . -m "*Dockerfile"', returnStdout: true).trim()
+
 def IMAGE_NAME = dockerfilePath  // Meter el nombre del repositorio // Se saca de variable de entorno
 def TAG_TO_CHECK = nextTag()
 def PREVIOUS_TAG = lastTag()
@@ -63,6 +63,7 @@ Map config = [
             return $GITHUB_TOKEN
 
         node{
+            String dockerfilePath = sh(script: 'find . -m "*Dockerfile"', returnStdout: true).trim()
             // Kubernetes
             sh 'apk add kubectl'
             // Helm
