@@ -249,7 +249,7 @@ pipeline{
     post {
         always {
             echo "Always"
-            echo "Commit"
+            echo "Cambio en feat"
             // Limpieza o acciones finales que deben realizarse sin importar el resultado
         }
         success {
