@@ -37,7 +37,7 @@ namespaces.items.each { Namespace ns ->
 //Se genera el mapa con la configuración
 Map config = [
     //Unos corhcetes {} significan que vas a meter un trozo de código. Como si ejecutases algo dentro del if
-    config.branchType: {
+    branchType: '', /*{
         if (env.GIT_BRANCH_NAME == 'master') {
             return 'MASTER'
         }
@@ -53,7 +53,7 @@ Map config = [
         else {
             return 'UKNOWN'
         }
-    },
+    },*/
         // Url del repo, https://stackoverflow.com/questions/45937337/jenkins-pipeline-get-repository-url-variable-under-pipeline-script-from-scm
         httpRepoUrl: scm.userRemoteConfigs[0].url,
         githubToken : {
@@ -82,6 +82,21 @@ Map config = [
         }
     }
 ]
+if (env.GIT_BRANCH_NAME == 'master') {
+    config.branchType = 'MASTER'
+}
+else if (env.GIT_BRANCH_NAME == 'feature.*') {
+    config.branchType = 'FEAT'
+}
+else if (env.GIT_BRANCH_NAME == 'break.*') {
+    config.branchType = 'BREAK'
+}
+else if (env.GIT_BRANCH_NAME == 'fix.*') {
+    config.branchType = 'FIX'
+}
+else {
+    config.branchType = 'UNKNOWN'
+}
 
 // Mirar de reemplazar con findFile
 def buscarArchivo(String nombre_ms, String expresion)
