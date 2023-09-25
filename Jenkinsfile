@@ -185,6 +185,7 @@ pipeline{
                 steps {
                     script {
                         if (isValidBranch()) {
+                            echo "step docker"
                             String dockerfile = buscarArchivo( app, "Dockerfile")
                             if(dockerfile != "")
                             {
