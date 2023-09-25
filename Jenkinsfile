@@ -278,7 +278,7 @@ pipeline{
         }
     }
 }
-
+/*
 boolean isValidBranch() { // Triggers
     return config.branchType != 'UKNOWN'
 }
@@ -302,7 +302,7 @@ boolean isMaster() {
 boolean isPullRequestToMaster() {
     return env.CHANGE_TARGET == 'refs/heads/master'
 }
-
+*/
 String lastTag() {
     /*
         El sh ejecuta sentencias bash
