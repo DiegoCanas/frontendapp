@@ -31,7 +31,29 @@ namespaces.items.each { Namespace ns ->
 }
 */
 
+boolean isValidBranch() { // Triggers
+    return config.branchType != 'UKNOWN'
+}
 
+boolean isFeature() {
+    return config.branchType == 'FEAT'
+}
+
+boolean isBreak() {
+    return config.branchType == 'BREAK'
+}
+
+boolean isFix() {
+    return config.branchType == 'FIX'
+}
+
+boolean isMaster() {
+    return config.branchType == 'MASTER'
+}
+
+boolean isPullRequestToMaster() {
+    return env.CHANGE_TARGET == 'refs/heads/master'
+}
 
 
 //Se genera el mapa con la configuración
@@ -278,31 +300,9 @@ pipeline{
         }
     }
 }
-/*
-boolean isValidBranch() { // Triggers
-    return config.branchType != 'UKNOWN'
-}
 
-boolean isFeature() {
-    return config.branchType == 'FEAT'
-}
 
-boolean isBreak() {
-    return config.branchType == 'BREAK'
-}
 
-boolean isFix() {
-    return config.branchType == 'FIX'
-}
-
-boolean isMaster() {
-    return config.branchType == 'MASTER'
-}
-
-boolean isPullRequestToMaster() {
-    return env.CHANGE_TARGET == 'refs/heads/master'
-}
-*/
 String lastTag() {
     /*
         El sh ejecuta sentencias bash
