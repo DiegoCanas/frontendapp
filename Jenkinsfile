@@ -249,6 +249,7 @@ pipeline{
     post {
         always {
             echo "Always"
+            echo "Commit"
             // Limpieza o acciones finales que deben realizarse sin importar el resultado
         }
         success {
