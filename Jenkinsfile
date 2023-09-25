@@ -24,11 +24,12 @@ def PREVIOUS_TAG = lastTag()
 String NEXUS_REGISTRY_URL = 'pre.docker.nexus.com'
 
 // Ahora puedes usar 'client' para interactuar con el clúster Kubernetes
+/*
 def namespaces = client.namespaces().list()
 namespaces.items.each { Namespace ns ->
     println("Namespace: ${ns.metadata.name}")
 }
-
+*/
 
 
 
