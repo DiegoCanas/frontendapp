@@ -248,6 +248,7 @@ pipeline{
     }
     post {
         always {
+            echo "Always"
             // Limpieza o acciones finales que deben realizarse sin importar el resultado
         }
         success {
