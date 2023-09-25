@@ -270,8 +270,6 @@ pipeline{
                 }
             }
         }
-    }
-}
 
 boolean isValidBranch() { // Triggers
     return config.branchType != 'UKNOWN'
