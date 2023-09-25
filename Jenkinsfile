@@ -159,118 +159,119 @@ pipeline{
                     }
                  }
             }
-            stage('Kubeconfig') {
-                //Has de contruir el proyecto de front para que el Dockerfile lo recoja
-                steps {
-                    script {
-                        if (isValidBranch()) {
-                            //Se hace desde el docker todo
-                        }
+        }
+        stage('Kubeconfig') {
+            //Has de contruir el proyecto de front para que el Dockerfile lo recoja
+            steps {
+                script {
+                    if (isValidBranch()) {
+                        //Se hace desde el docker todo
                     }
                 }
             }
-            /* Te los dejo creados a mano
-            stage('Crear Namespaces') {
-                steps {
-                    script {
-                        def kubeconfig = '/ruta/kubeconfig'
-                            // ¿Plantear simular la rama a producción como herramienta de CD con otra pipeline?
-                            sh "kubectl --kubeconfig=${kubeconfig} create namespace produccion"
-                            sh "kubectl --kubeconfig=${kubeconfig} create namespace preproduccion"
-                        }
+        }
+        /* Te los dejo creados a mano
+        stage('Crear Namespaces') {
+            steps {
+                script {
+                    def kubeconfig = '/ruta/kubeconfig'
+                        // ¿Plantear simular la rama a producción como herramienta de CD con otra pipeline?
+                        sh "kubectl --kubeconfig=${kubeconfig} create namespace produccion"
+                        sh "kubectl --kubeconfig=${kubeconfig} create namespace preproduccion"
                     }
                 }
             }
-            */
-            stage('Docker') {
-                steps {
-                    script {
-                        if (isValidBranch()) {
-                            echo "step docker"
-                            String dockerfile = buscarArchivo( app, "Dockerfile")
-                            if(dockerfile != "")
-                            {
-                                String tag = calculateNextTag()
-                                createTag(tag)
+        }
+        */
+        stage('Docker') {
+            steps {
+                script {
+                    if (isValidBranch()) {
+                        echo "step docker"
+                        String dockerfile = buscarArchivo( app, "Dockerfile")
+                        if(dockerfile != "")
+                        {
+                            String tag = calculateNextTag()
+                            createTag(tag)
 
-                                // Push a Nexus
-                                withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-                                    sh ("""
-                                        docker image build -f ./${app}/${dockerfile} -t ${app}:${tag}                                        
-                                        docker login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_REGISTRY_URL}
-                                        docker tag ${app}:${tag} ${NEXUS_REGISTRY_URL}/${app}:${tag}
-                                        docker push ${NEXUS_REGISTRY_URL}/${dockerfile}:${tag}
-                                    """)
-                                }
-                            }
-                            else
-                            {
-                                currentBuild.result = "FAILURE"
-                                throw new Exception("No existe ningun Dockerfile en el repositorio.") // Reemplazar por lo de abajo
-                                //error('No existe ningun Dockerfile en el repositorio')
+                            // Push a Nexus
+                            withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                                sh ("""
+                                    docker image build -f ./${app}/${dockerfile} -t ${app}:${tag}                                        
+                                    docker login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_REGISTRY_URL}
+                                    docker tag ${app}:${tag} ${NEXUS_REGISTRY_URL}/${app}:${tag}
+                                    docker push ${NEXUS_REGISTRY_URL}/${dockerfile}:${tag}
+                                """)
                             }
                         }
-                        else{
+                        else
+                        {
                             currentBuild.result = "FAILURE"
-                            throw new Exception("El microservicio ${NOMBRE_MS} no existe en el directorio de GitHub.")
+                            throw new Exception("No existe ningun Dockerfile en el repositorio.") // Reemplazar por lo de abajo
+                            //error('No existe ningun Dockerfile en el repositorio')
                         }
+                    }
+                    else{
+                        currentBuild.result = "FAILURE"
+                        throw new Exception("El microservicio ${NOMBRE_MS} no existe en el directorio de GitHub.")
                     }
                 }
             }
+        }
 
-            // FASE 5
+        // FASE 5
 /*
-            stage('Helm') {
-                //Implementar quí despliegue de Helm
-                steps {
-                    script {
-                        if (isValidBranch()) {
-                            if (isHelmInstalled()) {
-                                def helmInstalled = (script: 'helm list -a', returnStatus: true, returnStdout: true).trim()
-                                if branchType == 'Master'{
-                                    if (helmInstalled.contains('Variable de entorno que ha chupado el hhtps')){
-                                        echo 'instalado frontendapp'
-                                    }
-                                    else {
-                                        sh script : "helm --kubeconfig=${kubeconfig} install mi-release mi-chart --namespace=produccion -f values-produccion.yaml"
-                                    }   
+        stage('Helm') {
+            //Implementar quí despliegue de Helm
+            steps {
+                script {
+                    if (isValidBranch()) {
+                        if (isHelmInstalled()) {
+                            def helmInstalled = (script: 'helm list -a', returnStatus: true, returnStdout: true).trim()
+                            if branchType == 'Master'{
+                                if (helmInstalled.contains('Variable de entorno que ha chupado el hhtps')){
+                                    echo 'instalado frontendapp'
                                 }
                                 else {
-                                //sh script : "helm --kubeconfig=${kubeconfig} install mi-release mi-chart --namespace=preproduccion -f values-preproduccion.yaml"
+                                    sh script : "helm --kubeconfig=${kubeconfig} install mi-release mi-chart --namespace=produccion -f values-produccion.yaml"
+                                }   
                             }
-                            //Investigar 'helm list -a'
-                            //Investigar que es el 'helm upgrade'
+                            else {
+                            //sh script : "helm --kubeconfig=${kubeconfig} install mi-release mi-chart --namespace=preproduccion -f values-preproduccion.yaml"
                         }
+                        //Investigar 'helm list -a'
+                        //Investigar que es el 'helm upgrade'
                     }
                 }
-            } */
+            }
+        } */
+    }
+    post {
+        always {
+            // Limpieza o acciones finales que deben realizarse sin importar el resultado
         }
-        post {
-            always {
-                // Limpieza o acciones finales que deben realizarse sin importar el resultado
-            }
-            success {
-                echo "Pipeline completed successfully"
-            }
-            failure {
-                echo "Pipeline failed"
-                /*
-                if (dockerfileContents.contains("LABEL version=\"$TAG_TO_CHECK\"")){
-                // Agregar aquí acciones adicionales en caso de que el pipeline falle
-                // Falta comprobacion de si se va a hacer el rollback o no
-                //Cambiamos etiqueta a la anterior
-                sh "docker tag $IMAGE_NAME:$TAG_TO_CHECK $IMAGE_NAME:$PREVIOUS_TAG"
-                // Fuera imagen + etiqueta // Tener en cuenta que se borra la imagen de nexus, eso hace la local
-                sh "docker rmi $IMAGE_NAME:$TAG_TO_CHECK"
+        success {
+            echo "Pipeline completed successfully"
+        }
+        failure {
+            echo "Pipeline failed"
+            /*
+            if (dockerfileContents.contains("LABEL version=\"$TAG_TO_CHECK\"")){
+            // Agregar aquí acciones adicionales en caso de que el pipeline falle
+            // Falta comprobacion de si se va a hacer el rollback o no
+            //Cambiamos etiqueta a la anterior
+            sh "docker tag $IMAGE_NAME:$TAG_TO_CHECK $IMAGE_NAME:$PREVIOUS_TAG"
+            // Fuera imagen + etiqueta // Tener en cuenta que se borra la imagen de nexus, eso hace la local
+            sh "docker rmi $IMAGE_NAME:$TAG_TO_CHECK"
+            curl -X DELETE -u admin:admin123  "http://somedomain/nexus/content/repositories/myrepo/com/test/test-artifact/1.0.0/"
+            else{
+                echo 'Etiqueta no cambiada'
                 curl -X DELETE -u admin:admin123  "http://somedomain/nexus/content/repositories/myrepo/com/test/test-artifact/1.0.0/"
-                else{
-                    echo 'Etiqueta no cambiada'
-                    curl -X DELETE -u admin:admin123  "http://somedomain/nexus/content/repositories/myrepo/com/test/test-artifact/1.0.0/"
-                    */
-                }
-                }
+                */
+            }
             }
         }
+    }
 
 boolean isValidBranch() { // Triggers
     return config.branchType != 'UKNOWN'
