@@ -110,7 +110,7 @@ Map config = [
 // Mirar de reemplazar con findFile
 def buscarArchivo(String nombre_ms, String expresion)
 {
-    ls = sh(script: "ls ./${nombre_ms}", returnStdout: true).trim()
+    ls = sh(script: "ls /${nombre_ms}", returnStdout: true).trim()
     String[] archivos =  ls.split("\\s+"); 
     String out = "";
     for(int i = 0; i < archivos.length; ++i)
@@ -219,7 +219,7 @@ pipeline{
                 script {
                     if (isValidBranch()) {
                         echo "step docker"
-                        String dockerfiles = buscarArchivo( "https://github.com/DiegoCanas/frontendapp", "dockerfile")
+                        String dockerfiles = buscarArchivo( "frontendapp", "dockerfile")
                         if(dockerfiles != "")
                         {
                             String tag = calculateNextTag()
