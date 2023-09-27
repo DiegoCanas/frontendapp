@@ -37,7 +37,7 @@ namespaces.items.each { Namespace ns ->
 //Se genera el mapa con la configuración
 Map config = [
     //Unos corhcetes {} significan que vas a meter un trozo de código. Como si ejecutases algo dentro del if
-    branchType: '', /*{
+    branchType: getCurrentBranch, /*{
         if (env.GIT_BRANCH_NAME == 'master') {
             return 'MASTER'
         }
@@ -82,20 +82,23 @@ Map config = [
         }
     }
 ]
-if (env.GIT_BRANCH_NAME == 'master') {
-    config.branchType = 'MASTER'
-}
-else if (env.GIT_BRANCH_NAME == 'feature.*') {
-    config.branchType = 'FEAT'
-}
-else if (env.GIT_BRANCH_NAME == 'break.*') {
-    config.branchType = 'BREAK'
-}
-else if (env.GIT_BRANCH_NAME == 'fix.*') {
-    config.branchType = 'FIX'
-}
-else {
-    config.branchType = 'UNKNOWN'
+
+String getCurrentBranch(){
+    if (env.GIT_BRANCH_NAME == 'master') {
+        return 'MASTER'
+    }
+    else if (env.GIT_BRANCH_NAME == 'feature.*') {
+        return 'FEAT'
+    }
+    else if (env.GIT_BRANCH_NAME == 'break.*') {
+        return 'BREAK'
+    }
+    else if (env.GIT_BRANCH_NAME == 'fix.*') {
+        return 'FIX'
+    }
+    else {
+        return 'UKNOWN'
+    }
 }
 
 // Mirar de reemplazar con findFile
@@ -173,9 +176,11 @@ pipeline{
         stage('Get next version') {
             steps {
                 script {
-                    if (!(isValidBranch() && isPullRequestToMaster())) {
-                        error('Is not a pull request')
-                        currentBuild.result = "SUCCESS"
+                    if (isValidBranch() || isPullRequestToMaster()) {
+                        //Calculo version mirando el tag
+                    } else {
+                        error('Is not a pull request or a valid branch')
+                        currentBuild.result = 'FAILURE'
                     }
                  }
             }
@@ -294,27 +299,27 @@ pipeline{
     }
 }
 
-boolean isValidBranch() { // Triggers
+boolean isValidBranch(Map config) { // Triggers
     return config.branchType != 'UKNOWN'
 }
 
-boolean isFeature() {
+boolean isFeature(Map config) {
     return config.branchType == 'FEAT'
 }
 
-boolean isBreak() {
+boolean isBreak(Map config) {
     return config.branchType == 'BREAK'
 }
 
-boolean isFix() {
+boolean isFix(Map config) {
     return config.branchType == 'FIX'
 }
 
-boolean isMaster() {
+boolean isMasterMap config) {
     return config.branchType == 'MASTER'
 }
 
-boolean isPullRequestToMaster() {
+boolean isPullRequestToMaster(Map config) {
     return env.CHANGE_TARGET == 'refs/heads/master'
 }
 
