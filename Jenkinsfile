@@ -53,7 +53,7 @@ String getCurrentBranch(){
 //Se genera el mapa con la configuración
 Map config = [
     //Unos corhcetes {} significan que vas a meter un trozo de código. Como si ejecutases algo dentro del if
-    branchType: getCurrentBranch, /*{
+    branchType: getCurrentBranch(), /*{
         if (env.GIT_BRANCH_NAME == 'master') {
             return 'MASTER'
         }
