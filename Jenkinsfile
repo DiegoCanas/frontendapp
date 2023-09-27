@@ -47,7 +47,7 @@ String getCurrentBranch(){
         return 'UKNOWN'
     }
 }
-
+// ¿TA JOYA? -> Revisar
 def isValidBranch(){
     if (getCurrentBranch() == 'UKNOWN'){
         currentBuild.result = 'FAILURE'
@@ -219,7 +219,7 @@ pipeline{
                 script {
                     if (isValidBranch()) {
                         echo "step docker"
-                        String dockerfiles = buscarArchivo( app, "dockerfile")
+                        String dockerfiles = buscarArchivo( "app", "dockerfile")
                         if(dockerfiles != "")
                         {
                             String tag = calculateNextTag()
