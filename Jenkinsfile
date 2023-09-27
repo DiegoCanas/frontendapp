@@ -49,10 +49,11 @@ String getCurrentBranch(){
 }
 
 def isValidBranch(){
-    if getCurrentBranch() == 'UKNOWN'
-    currentBuild.result = 'FAILURE'
-} else {
-    echo "valida"
+    if (getCurrentBranch() == 'UKNOWN'){
+        currentBuild.result = 'FAILURE'
+    } else {
+        echo "valida"    
+    }  
 }
 
 //Se genera el mapa con la configuración
