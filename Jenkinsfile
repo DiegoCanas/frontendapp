@@ -18,8 +18,7 @@ def config = new ConfigBuilder()
 def client = new DefaultKubernetesClient(config)
 */
 
-
-//
+//def dockerfile = findFiles(glob:'**/Dockerfile').get(0)
 
   // Meter el nombre del repositorio // Se saca de variable de entorno
 
@@ -106,9 +105,8 @@ Map config = [
     }
 ]
 
-def buscarArchivo = findFiles(glob:'https://github.com/DiegoCanas/frontendapp/Dockerfile').get(0)
 
-/*
+
 // Mirar de reemplazar con findFile
 def buscarArchivo(String nombre_ms, String expresion)
 {
@@ -124,13 +122,6 @@ def buscarArchivo(String nombre_ms, String expresion)
     }
     return out;
 }
-*/
-
-
-
-
-
-
 
 /*
 def isHelmInstalled() {
@@ -228,7 +219,7 @@ pipeline{
                 script {
                     if (isValidBranch()) {
                         echo "step docker"
-                        String dockerfiles = buscarArchivo( "frontendapp", "dockerfile")
+                        String dockerfiles = buscarArchivo( "https://github.com/DiegoCanas/frontendapp", "dockerfile")
                         if(dockerfiles != "")
                         {
                             String tag = calculateNextTag()
