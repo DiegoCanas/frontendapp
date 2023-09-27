@@ -315,7 +315,7 @@ boolean isFix(Map config) {
     return config.branchType == 'FIX'
 }
 
-boolean isMasterMap config) {
+boolean isMaster(Map config) {
     return config.branchType == 'MASTER'
 }
 
