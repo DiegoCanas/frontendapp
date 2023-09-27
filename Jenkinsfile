@@ -30,7 +30,23 @@ namespaces.items.each { Namespace ns ->
     println("Namespace: ${ns.metadata.name}")
 }
 */
-
+String getCurrentBranch(){
+    if (env.GIT_BRANCH_NAME == 'master') {
+        return 'MASTER'
+    }
+    else if (env.GIT_BRANCH_NAME == 'feature.*') {
+        return 'FEAT'
+    }
+    else if (env.GIT_BRANCH_NAME == 'break.*') {
+        return 'BREAK'
+    }
+    else if (env.GIT_BRANCH_NAME == 'fix.*') {
+        return 'FIX'
+    }
+    else {
+        return 'UKNOWN'
+    }
+}
 
 
 
@@ -83,23 +99,7 @@ Map config = [
     }
 ]
 
-String getCurrentBranch(){
-    if (env.GIT_BRANCH_NAME == 'master') {
-        return 'MASTER'
-    }
-    else if (env.GIT_BRANCH_NAME == 'feature.*') {
-        return 'FEAT'
-    }
-    else if (env.GIT_BRANCH_NAME == 'break.*') {
-        return 'BREAK'
-    }
-    else if (env.GIT_BRANCH_NAME == 'fix.*') {
-        return 'FIX'
-    }
-    else {
-        return 'UKNOWN'
-    }
-}
+
 
 // Mirar de reemplazar con findFile
 def buscarArchivo(String nombre_ms, String expresion)
