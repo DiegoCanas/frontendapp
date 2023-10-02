@@ -349,7 +349,7 @@ String lastTag() {
         Obten los tags remotos
     */
     sh('git ls-remote --tags origin')
-
+    sh 'git fetch --tags'
     //Ordenalos alfanuméricamente para obtener el último
     lastTag2 = sh(script: 'git describe --tags --abbrev=0', stdout : true).trim()
     
