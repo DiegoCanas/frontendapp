@@ -370,7 +370,6 @@ String calculateNextTag(Map config) {
     def y = tagParts[1] as int
     def z = tagParts[2] as int
     
-    //Esta parte te la dejo a ti, quiero dormir (ten en cuenta si no hay tags en el repo)
     if (isFeature(config)) {
         y++
     }
@@ -380,7 +379,7 @@ String calculateNextTag(Map config) {
     else if (isFix(config)) {
         z++
     } else if(isMaster(config)){
-        //Decidir que hacer
+        x++
     }
     
     return "${x}.${y}.${z}"
