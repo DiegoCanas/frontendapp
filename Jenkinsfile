@@ -192,12 +192,12 @@ pipeline{
         stage('Get next version') {
             steps {
                 script {
-                    sh ('env')
-                    if (isValidBranch() || isPullRequestToMaster()) {
+                    sh ('env') // Esto de aqui abaj, ¿PARA QUE? Para que vamos a buscar generar ahora otra version?
+                    /*if (isValidBranch() || isPullRequestToMaster()) {
                         //Calculo version mirando el tag
                     } else {
                         error('Is not a pull request or a valid branch')
-                        currentBuild.result = 'FAILURE'
+                        currentBuild.result = 'FAILURE'*/
                     }
                  }
             }
