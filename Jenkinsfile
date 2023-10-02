@@ -352,7 +352,7 @@ String lastTag() {
     sh('git fetch --tags')
     sh('git tag')
     //Ordenalos alfanuméricamente para obtener el último
-    return sh(script: 'git describe --tags --abbrev=0', stdout : true)
+    return sh(script: 'git describe --tags --abbrev=0', returnStdout : true)
 }
 
 String calculateNextTag() {
