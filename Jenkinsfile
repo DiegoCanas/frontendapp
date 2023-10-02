@@ -33,16 +33,18 @@ namespaces.items.each { Namespace ns ->
 
 
 String getCurrentBranch(){
-    if (env.GIT_BRANCH_NAME == 'master') {
+    def branch = env.GIT_BRANCH.replaceAll('refs/heads/', '')
+
+    if (branch == 'master') {
         return 'MASTER'
     }
-    else if (env.GIT_BRANCH_NAME == 'feature.*') {
+    else if (branch ==~ 'feature.*') {
         return 'FEAT'
     }
-    else if (env.GIT_BRANCH_NAME == 'break.*') {
+    else if (branch ==~ 'break.*') {
         return 'BREAK'
     }
-    else if (env.GIT_BRANCH_NAME == 'fix.*') {
+    else if (branch ==~ 'fix.*') {
         return 'FIX'
     }
     else {
