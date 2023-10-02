@@ -349,9 +349,15 @@ String lastTag() {
         Obten los tags remotos
     */
     sh('git ls-remote --tags origin')
-    
+
     //Ordenalos alfanuméricamente para obtener el último
-    return sh(script: 'git describe --tags --abbrev=0', stdout : true)
+    def lastTag2 sh(script: 'git describe --tags --abbrev=0', stdout : true)
+    
+    if (lastTag.isEmpty()) {
+        error("No se encontraron etiquetas en el repositorio.")
+    } else {
+        return lastTag2
+    }
 }
 
 String calculateNextTag() {
