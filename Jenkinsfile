@@ -30,6 +30,8 @@ namespaces.items.each { Namespace ns ->
     println("Namespace: ${ns.metadata.name}")
 }
 */
+
+
 String getCurrentBranch(){
     if (env.GIT_BRANCH_NAME == 'master') {
         return 'MASTER'
@@ -122,6 +124,17 @@ def buscarArchivo(String nombre_ms, String expresion)
     }
     return out;
 }
+
+
+def clonarRepo(){
+    def repoURL = "https://github.com/DiegoCanas/frontendapp"
+    def repoDir = "frontendapp" // Nombre del directorio destino
+
+    sh "git clone ${repoURL} ${repoDir}"
+
+                        
+}
+
 
 /*
 def isHelmInstalled() {
@@ -219,7 +232,7 @@ pipeline{
                 script {
                     if (isValidBranch()) {
                         echo "step docker"
-                        checkout scm
+                        clonarRepo()
                         String dockerfiles = buscarArchivo( "frontendapp", "dockerfile")
                         if(dockerfiles != "")
                         {
