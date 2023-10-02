@@ -64,23 +64,7 @@ def isValidBranch(){
 //Se genera el mapa con la configuración
 Map config = [
     //Unos corhcetes {} significan que vas a meter un trozo de código. Como si ejecutases algo dentro del if
-    branchType: getCurrentBranch(), /*{
-        if (env.GIT_BRANCH_NAME == 'master') {
-            return 'MASTER'
-        }
-        else if (env.GIT_BRANCH_NAME == 'feature.*') {
-            return 'FEAT'
-        }
-        else if (env.GIT_BRANCH_NAME == 'break.*') {
-            return 'BREAK'
-        }
-        else if (env.GIT_BRANCH_NAME == 'fix.*') {
-            return 'FIX'
-        }
-        else {
-            return 'UKNOWN'
-        }
-    },*/
+    //branchType: getCurrentBranch(),
         // Url del repo, https://stackoverflow.com/questions/45937337/jenkins-pipeline-get-repository-url-variable-under-pipeline-script-from-scm
         httpRepoUrl: scm.userRemoteConfigs[0].url,
         githubToken : {
@@ -198,6 +182,7 @@ pipeline{
         stage('Get next version') {
             steps {
                 script {
+                    sh ('env')
                     if (isValidBranch() || isPullRequestToMaster()) {
                         //Calculo version mirando el tag
                     } else {
