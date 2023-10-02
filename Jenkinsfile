@@ -33,6 +33,7 @@ namespaces.items.each { Namespace ns ->
 
 
 String getCurrentBranch(){
+    sh ('env')
     def branch = env.GIT_BRANCH.replaceAll('refs/heads/', '')
 
     if (branch == 'master') {
