@@ -372,16 +372,16 @@ String calculateNextTag(Map config) {
     
     if (isFeature(config)) {
         y++
-    }
-    else if (isBreak(config)) {
+    } else if (isBreak(config)) {
         x++
-    }
-    else if (isFix(config)) {
+    } else if (isFix(config)) {
         z++
     } else if(isMaster(config)){
         x += 1
+    } else {
+        echo "no hago nada"
     }
-    
+    echo "version calculada papa ${x}.${y}.${z}"
     return "${x}.${y}.${z}"
 }
 
