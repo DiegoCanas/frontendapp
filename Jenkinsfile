@@ -188,7 +188,7 @@ pipeline{
             '''
         }
     }
-    stages {
+    stages {/*
         stage('Get next version') {
             steps {
                 script {
@@ -197,10 +197,10 @@ pipeline{
                         //Calculo version mirando el tag
                     } else {
                         error('Is not a pull request or a valid branch')
-                        currentBuild.result = 'FAILURE'} */
+                        currentBuild.result = 'FAILURE'} 
                 }
             }
-        }
+        } */
         stage('Kubeconfig') {
             //Has de contruir el proyecto de front para que el Dockerfile lo recoja
             steps {
