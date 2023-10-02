@@ -236,7 +236,7 @@ pipeline{
                         String dockerfiles = buscarArchivo( "frontendapp", "dockerfile")
                         if(dockerfiles != "")
                         {
-                            String tag = calculateNextTag()
+                            String tag = calculateNextTag(config)
                             createTag(tag)
 
                             // Push a Nexus
@@ -355,7 +355,7 @@ String lastTag() {
     return sh(script: 'git describe --tags --abbrev=0', returnStdout : true)
 }
 
-String calculateNextTag() {
+String calculateNextTag(Map config) {
     def lastTagValue = lastTag()
     
     if (lastTagValue == null) {
@@ -371,15 +371,15 @@ String calculateNextTag() {
     def z = tagParts[2] as int
     
     //Esta parte te la dejo a ti, quiero dormir (ten en cuenta si no hay tags en el repo)
-    if (isFeature()) {
+    if (isFeature(config)) {
         y++
     }
-    else if (isBreak()) {
+    else if (isBreak(config)) {
         x++
     }
-    else if (isFix()) {
+    else if (isFix(config)) {
         z++
-    } else if(isMaster()){
+    } else if(isMaster(config)){
         //Decidir que hacer
     }
     
