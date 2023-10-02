@@ -122,6 +122,16 @@ def clonarRepo(){
                         
 }
 
+def isPullRequestToMaster() {
+    if (env.CHANGE_ID != null && env.CHANGE_TARGET == 'refs/heads/master') {
+        echo "Este es un pull request a la rama 'master'"
+        // Realiza acciones específicas para pull requests a 'master'
+    } else {
+        echo "Este no es un pull request a la rama 'master'"
+        // Realiza acciones diferentes si no es un pull request a 'master'
+    }
+
+}
 
 /*
 def isHelmInstalled() {
