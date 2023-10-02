@@ -355,7 +355,12 @@ String lastTag() {
 }
 
 String calculateNextTag() {
-
+    def lastTagValue = lastTag()
+    
+    if (lastTagValue == null) {
+        error("No se encontraron etiquetas en el repositorio.")
+        return null
+    }
 
     // https://www.baeldung.com/groovy-convert-string-to-integer
     
