@@ -351,13 +351,7 @@ String lastTag() {
     sh('git ls-remote --tags origin')
     sh 'git fetch --tags'
     //Ordenalos alfanuméricamente para obtener el último
-    lastTag2 = sh(script: 'git describe --tags --abbrev=0', stdout : true)
-    
-    if (lastTag2.isEmpty()) {
-        error("No se encontraron etiquetas en el repositorio.")
-    } else {
-        return lastTag2
-    }
+    return sh(script: 'git describe --tags --abbrev=0', stdout : true)
 }
 
 String calculateNextTag() {
