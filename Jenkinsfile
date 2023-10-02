@@ -193,11 +193,11 @@ pipeline{
             steps {
                 script {
                     sh ('env') // Esto de aqui abaj, ¿PARA QUE? Para que vamos a buscar generar ahora otra version?
-                    /*if (isValidBranch() || isPullRequestToMaster()) {
+                    /* if (isValidBranch() || isPullRequestToMaster()) {
                         //Calculo version mirando el tag
                     } else {
                         error('Is not a pull request or a valid branch')
-                        currentBuild.result = 'FAILURE'*/
+                        currentBuild.result = 'FAILURE'} */
                 }
             }
         }
@@ -260,6 +260,36 @@ pipeline{
                 }
             }
         }
+        post {
+            always {
+                echo "Always"
+                echo "Cambio en feat"
+                // Limpieza o acciones finales que deben realizarse sin importar el resultado
+            }
+            success {
+                echo "Pipeline completed successfully"
+            }
+            failure {
+                echo "Pipeline failed"
+                /*
+                if (dockerfileContents.contains("LABEL version=\"$TAG_TO_CHECK\"")){
+                // Agregar aquí acciones adicionales en caso de que el pipeline falle
+                // Falta comprobacion de si se va a hacer el rollback o no
+                //Cambiamos etiqueta a la anterior
+                sh "docker tag $IMAGE_NAME:$TAG_TO_CHECK $IMAGE_NAME:$PREVIOUS_TAG"
+                // Fuera imagen + etiqueta // Tener en cuenta que se borra la imagen de nexus, eso hace la local
+                sh "docker rmi $IMAGE_NAME:$TAG_TO_CHECK"
+                curl -X DELETE -u admin:admin123  "http://somedomain/nexus/content/repositories/myrepo/com/test/test-artifact/1.0.0/"
+                else{
+                    echo 'Etiqueta no cambiada'
+                    curl -X DELETE -u admin:admin123  "http://somedomain/nexus/content/repositories/myrepo/com/test/test-artifact/1.0.0/"
+                    }
+                    */
+            }
+        }
+
+    }
+}        
 
         // FASE 5
 /*
@@ -288,34 +318,7 @@ pipeline{
             }
         } 
     }*/
-        post {
-            always {
-                echo "Always"
-                echo "Cambio en feat"
-                // Limpieza o acciones finales que deben realizarse sin importar el resultado
-            }
-            success {
-                echo "Pipeline completed successfully"
-            }
-            failure {
-                echo "Pipeline failed"
-                /*
-                if (dockerfileContents.contains("LABEL version=\"$TAG_TO_CHECK\"")){
-                // Agregar aquí acciones adicionales en caso de que el pipeline falle
-                // Falta comprobacion de si se va a hacer el rollback o no
-                //Cambiamos etiqueta a la anterior
-                sh "docker tag $IMAGE_NAME:$TAG_TO_CHECK $IMAGE_NAME:$PREVIOUS_TAG"
-                // Fuera imagen + etiqueta // Tener en cuenta que se borra la imagen de nexus, eso hace la local
-                sh "docker rmi $IMAGE_NAME:$TAG_TO_CHECK"
-                curl -X DELETE -u admin:admin123  "http://somedomain/nexus/content/repositories/myrepo/com/test/test-artifact/1.0.0/"
-                else{
-                    echo 'Etiqueta no cambiada'
-                    curl -X DELETE -u admin:admin123  "http://somedomain/nexus/content/repositories/myrepo/com/test/test-artifact/1.0.0/"
-                    */
-            }
-        }
-    }
-}
+
 
 boolean isValidBranch(Map config) { // Triggers
     return config.branchType != 'UKNOWN'
