@@ -379,7 +379,7 @@ String calculateNextTag(Map config) {
     else if (isFix(config)) {
         z++
     } else if(isMaster(config)){
-        x++
+        x += 1
     }
     
     return "${x}.${y}.${z}"
