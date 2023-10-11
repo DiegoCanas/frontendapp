@@ -109,6 +109,7 @@ def buscarArchivo(String nombre_ms, String expresion)
             out = archivos[i];
         }
     }
+    echo "buscarArchivo"
     return out;
 }
 
@@ -118,7 +119,7 @@ def clonarRepo(){
     def repoDir = "frontendapp" // Nombre del directorio destino
 
     sh "git clone ${repoURL} ${repoDir}"
-
+    echo "clonarRepo"
                         
 }
 
@@ -231,12 +232,13 @@ pipeline{
                         echo "step docker"
                         clonarRepo()
                         sh 'npm run build'
+                        echo "buildapp"
                         String dockerfiles = buscarArchivo( "frontendapp", "dockerfile")
                         if(dockerfiles != "")
                         {
                             String tag = calculateNextTag(config)
                             createTag(tag)
-
+        
                             // Push a Nexus
                             withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
                                 sh ("""
