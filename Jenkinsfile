@@ -211,7 +211,7 @@ pipeline{
                 }
             }
         }
-        /* Te los dejo creados a mano
+        /* 
         stage('Crear Namespaces') {
             steps {
                 script {
@@ -230,6 +230,7 @@ pipeline{
                     if (isValidBranch()) {
                         echo "step docker"
                         clonarRepo()
+                        sh 'npm run build'
                         String dockerfiles = buscarArchivo( "frontendapp", "dockerfile")
                         if(dockerfiles != "")
                         {
